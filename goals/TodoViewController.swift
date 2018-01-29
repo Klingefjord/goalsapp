@@ -10,24 +10,45 @@ import UIKit
 
 class TodoViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
+    @IBOutlet weak var headerView: HeaderView!
     @IBOutlet weak var tableView: UITableView!
     private var todos = ["clean", "cook", "take out the garbage", "save the world", "make bed"]
+    private let margin: CGFloat = 60
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupNavigationBar()
+        setupTableView()
+        StyleUtil.setupDefaultStyle(self)
+
+        // Todo - remove and implement functionality
+        headerView.doneButton.isHidden = true
+        headerView.todoButton.isUserInteractionEnabled = false
+    }
+
+    // MARK - Setup
+
+    func setupNavigationBar() {
+        navigationController?.navigationBar.setStyle()
+    }
+
+    func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.contentInset = UIEdgeInsetsMake(margin, 0, 0, 0)
 
         let nib = UINib(nibName: "ToDoCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: ToDoCell.identifier)
     }
+
+    // MARK - Table view methods
 
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return todos.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -36,24 +57,33 @@ class TodoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         cell.todoImage?.image = UIImage(named: "checkEmpty")
         cell.todoText?.text = todos[indexPath.row]
-        cell.todoText?.textColor = .white
         cell.backgroundColor = .clear
+        cell.selectedBackgroundView = UIView()
         return cell
     }
 
-    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        let emptyImage = UIImage(named: "checkEmpty")
-        let filledImage = UIImage(named: "checkChecked")
-        tableView.cellForRow(at: indexPath)?.imageView?.image = tableView.cellForRow(at: indexPath)?.imageView?.image == emptyImage ? filledImage : emptyImage
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let cell = tableView.cellForRow(at: indexPath) as? ToDoCell else {
+            return
+        }
+
+        cell.done = !cell.done
+
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
-    override func didReceiveMemoryWarning() {
-
-        // Dispose of any resources that can be recreated.
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        print(scrollView.contentOffset.y)
+        if scrollView.contentOffset.y >= -margin && headerView.alpha == 1 {
+            UIView.animate(withDuration: 0.3) { [weak self] in
+                self?.headerView.alpha = 0
+            }
+        } else if scrollView.contentOffset.y < -margin && headerView.alpha < 1 {
+            UIView.animate(withDuration: 0.3) { [weak self] in
+                self?.headerView.alpha = 1
+            }
+        }
     }
-
-    // MARK - add new item
 
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         var textField = UITextField()
@@ -74,8 +104,5 @@ class TodoViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
         present(alert, animated: true, completion: nil)
     }
-
-
-
 }
 

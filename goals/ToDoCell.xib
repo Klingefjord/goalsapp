@@ -10,6 +10,11 @@
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="HelveticaNeue.ttc">
+            <string>HelveticaNeue-Bold</string>
+        </array>
+    </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -29,19 +34,19 @@
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IdP-Bh-CPP">
                         <rect key="frame" x="90" y="35" width="42" height="21"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <nil key="textColor"/>
+                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="16"/>
+                        <color key="textColor" red="0.91392725706100464" green="0.9019511342048645" blue="0.90196138620376587" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
-                    <constraint firstItem="zfq-7B-muW" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="6zR-Eg-0Dp"/>
+                    <constraint firstItem="zfq-7B-muW" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" priority="500" constant="20" id="6zR-Eg-0Dp"/>
                     <constraint firstItem="IdP-Bh-CPP" firstAttribute="leading" secondItem="zfq-7B-muW" secondAttribute="trailing" constant="20" id="Gga-sR-fpT"/>
                     <constraint firstItem="IdP-Bh-CPP" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="24" id="YFm-nE-YZG"/>
-                    <constraint firstItem="zfq-7B-muW" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="20" id="e1n-Cs-tj6"/>
+                    <constraint firstItem="zfq-7B-muW" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" priority="500" constant="20" id="e1n-Cs-tj6"/>
                     <constraint firstAttribute="bottomMargin" secondItem="IdP-Bh-CPP" secondAttribute="bottom" constant="34" id="gWO-YJ-BRj"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="zfq-7B-muW" secondAttribute="bottom" constant="20" id="jd1-K6-iyr"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="zfq-7B-muW" secondAttribute="bottom" priority="500" constant="20" id="jd1-K6-iyr"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
