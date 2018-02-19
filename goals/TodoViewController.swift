@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TodoViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class TodoViewController: UIViewController {
 
     @IBOutlet weak var headerView: HeaderView!
     @IBOutlet weak var tableView: UITableView!
@@ -26,11 +26,32 @@ class TodoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         headerView.todoButton.isUserInteractionEnabled = false
     }
 
-    // MARK - Setup
-
     func setupNavigationBar() {
         navigationController?.navigationBar.setStyle()
     }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.y >= -margin && headerView.alpha == 1 {
+            UIView.animate(withDuration: 0.3) { [weak self] in
+                self?.headerView.alpha = 0
+            }
+        } else if scrollView.contentOffset.y < -margin && headerView.alpha < 1 {
+            UIView.animate(withDuration: 0.3) { [weak self] in
+                self?.headerView.alpha = 1
+            }
+        }
+    }
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "addTodoSegue", let addVC = segue.destination as? AddTodoViewController {
+            addVC.delegate = self
+        }
+    }
+}
+
+extension TodoViewController: UITableViewDataSource, UITableViewDelegate {
+
+    // MARK - Table view methods
 
     func setupTableView() {
         tableView.delegate = self
@@ -41,8 +62,6 @@ class TodoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         tableView.register(nib, forCellReuseIdentifier: ToDoCell.identifier)
     }
 
-    // MARK - Table view methods
-
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -50,6 +69,8 @@ class TodoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return todos.count
     }
+
+
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ToDoCell.identifier, for: indexPath) as? ToDoCell else {
@@ -71,38 +92,11 @@ class TodoViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
         tableView.deselectRow(at: indexPath, animated: true)
     }
-
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        print(scrollView.contentOffset.y)
-        if scrollView.contentOffset.y >= -margin && headerView.alpha == 1 {
-            UIView.animate(withDuration: 0.3) { [weak self] in
-                self?.headerView.alpha = 0
-            }
-        } else if scrollView.contentOffset.y < -margin && headerView.alpha < 1 {
-            UIView.animate(withDuration: 0.3) { [weak self] in
-                self?.headerView.alpha = 1
-            }
-        }
-    }
-
-    @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
-        var textField = UITextField()
-
-        let alert = UIAlertController(title: "Add new item", message: "", preferredStyle: .alert)
-        let action = UIAlertAction(title: "Add item", style: .default) { [weak self] action in
-            if let text = textField.text {
-                self?.todos.append(text)
-            }
-        }
-
-        alert.addTextField { (alertTextField) in
-            alertTextField.placeholder = "Create new item"
-            textField = alertTextField
-        }
-
-        alert.addAction(action)
-
-        present(alert, animated: true, completion: nil)
-    }
 }
 
+extension TodoViewController: AddTodoViewControllerDelegate {
+    func addedNewTodo(_ todo: String) {
+        todos.append(todo)
+        tableView.reloadData()
+    }
+}

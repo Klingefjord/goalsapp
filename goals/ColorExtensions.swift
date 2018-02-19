@@ -17,3 +17,4 @@ extension UIColor {
 
     static let backgroundGray = UIColor(r: 124, g: 124, b: 124)
 }
+
