@@ -12,7 +12,7 @@ class TodoViewController: UIViewController {
 
     @IBOutlet weak var headerView: HeaderView!
     @IBOutlet weak var tableView: UITableView!
-    private var todos = ["clean", "cook", "take out the garbage", "save the world", "make bed"]
+    private var todos: [Todo] = [Todo("Clean"), Todo("cook"), Todo("take out the garbage"), Todo("save the world"), Todo("make bed")]
     private let margin: CGFloat = 60
 
     override func viewDidLoad() {
@@ -77,7 +77,8 @@ extension TodoViewController: UITableViewDataSource, UITableViewDelegate {
             return UITableViewCell()
         }
         cell.todoImage?.image = UIImage(named: "checkEmpty")
-        cell.todoText?.text = todos[indexPath.row]
+        cell.todoText?.text = todos[indexPath.row].name
+        cell.done = todos[indexPath.row].done
         cell.backgroundColor = .clear
         cell.selectedBackgroundView = UIView()
         return cell
@@ -88,6 +89,8 @@ extension TodoViewController: UITableViewDataSource, UITableViewDelegate {
             return
         }
 
+        let todo = todos[indexPath.row]
+        todo.done = !todo.done
         cell.done = !cell.done
 
         tableView.deselectRow(at: indexPath, animated: true)
@@ -96,7 +99,7 @@ extension TodoViewController: UITableViewDataSource, UITableViewDelegate {
 
 extension TodoViewController: AddTodoViewControllerDelegate {
     func addedNewTodo(_ todo: String) {
-        todos.append(todo)
+        todos.append(Todo(todo))
         tableView.reloadData()
     }
 }

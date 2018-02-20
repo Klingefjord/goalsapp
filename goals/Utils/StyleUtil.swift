@@ -16,6 +16,7 @@ struct StyleUtil {
             UIColor(red: 0, green: 0, blue: 0, alpha: 0).cgColor,
             UIColor(red: 0, green: 0, blue: 0, alpha: 0.5).cgColor
         ]
+        
         overlay.frame = sender.view.frame
 
         sender.view.layer.addSublayer(overlay)
