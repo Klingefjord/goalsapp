@@ -21,7 +21,7 @@ class TodoViewController: UIViewController {
         setupTableView()
         StyleUtil.setupDefaultStyle(self)
 
-        // Todo - remove and implement functionality
+        // Todo ( pun indended :) ) - remove and implement functionality
         headerView.doneButton.isHidden = true
         headerView.todoButton.isUserInteractionEnabled = false
     }
@@ -70,6 +70,15 @@ extension TodoViewController: UITableViewDataSource, UITableViewDelegate {
         return todos.count
     }
 
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let delete = UITableViewRowAction(style: .default, title: "Delete") { [weak self] action, path in
+            self?.removeCellAt(path)
+        }
+
+        delete.backgroundColor = UIColor.clear
+
+        return [delete]
+    }
 
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -95,11 +104,16 @@ extension TodoViewController: UITableViewDataSource, UITableViewDelegate {
 
         tableView.deselectRow(at: indexPath, animated: true)
     }
+
+    func removeCellAt(_ indexPath: IndexPath) {
+        todos.remove(at: indexPath.row)
+        tableView.reloadSections(IndexSet(integer: 0), with: .left)
+    }
 }
 
 extension TodoViewController: AddTodoViewControllerDelegate {
     func addedNewTodo(_ todo: String) {
         todos.append(Todo(todo))
-        tableView.reloadData()
+        tableView.reloadSections(IndexSet(integer: 0), with: .left)
     }
 }
